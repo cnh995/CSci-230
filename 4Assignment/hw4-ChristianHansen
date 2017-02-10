@@ -1,0 +1,4 @@
+gcc -Wall -c hw4-A-ChristianHansen.c
+gcc -Wall -c hw4-B-ChristianHansen.c
+gcc -Wall -o hw4 hw4-ChristianHansen.c hw4-A-ChristianHansen.o hw4-B-ChristianHansen.o
+rm -rf *.o
