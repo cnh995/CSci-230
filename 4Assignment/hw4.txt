@@ -1,0 +1,71 @@
+HW-4	CS230	10 points	Due: Friday, 2/10/2017
+
+Modify HW2 such that there is now five components to it:
+
+1. A function called foo that determines the size of the 
+data file. It must be called 3 times by the main program, 
+once for each input file (americanN.txt). The function must 
+be defined as:  
+
+   int foo(char *filename)
+
+This code must be stored in a seperate file called hw4-A-yourname.c. 
+
+2. A function called bar that writes the result to the
+output file (words.txt). It will be called once by the main
+program. The function must be defined as:  
+
+   void bar(char *filename, int total, char **words) 
+
+This code must be stored in a seperate file called hw4-B-yourname.c. 
+
+3. A main routine that calls foo and bar and handles the rest of
+the processing. This code must be stored in a seperate file called
+hw4-yourname.c
+
+4. A header/include that includes any and all header/include
+files requried by the program. The header/include file may also 
+include any global variables. This code must be stored in a 
+seperate file called hw4-yourname.h.
+
+5. A script that has at least three lines. The first line will
+compile foo into a .o file. The second line will compile bar
+into a .o file. The third line will compile the main routine and 
+link in both .o files resulting in an executable file called hw4 
+
+You can use any editor to make the script. Then, at the linux command
+line use chmod 755 script-name to make the script executable.
+
+This script must be stored in a seperate file called hw4-yourname
+
+REQUIREMENTS:
+-------------
+1. Your program must run in Streibel 115/109 or on shell.aero.und.edu.
+
+2. Your full name must appear as a comment at the beginning of your 
+   programs (all C files!).
+
+3. Your source code files must be named:
+   hw4-A-yourname.c
+   hw4-B-yourname.c
+   hw4-yourname.c
+   hw4-yourname.h
+   hw4-yourname
+
+   And packaged as a tarball (called hw4.tar). Submissions not in the form
+   of a tarball will not be graded.
+
+4. Email your tarball (subject hw4-yourname) to rmarsh@cs.und.edu
+
+EXTRA CREDIT (5 points):
+------------------------
+1. Create a makefile that includes:
+1) An "all" option
+2) A "clean" option
+
+The makefile must use variables for the compiler (gcc) and
+the compiler flags (-c and -Wall).
+
+Each option in the make file must include the appropriate dependencies.
+
+Call the makefile yourname-makefile
