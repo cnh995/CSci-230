@@ -1,0 +1,59 @@
+HW-8	CS230	10 points	Due: March 24
+
+Write a program that builds a doubly linked linked-list and 
+populate the linked list with the integers 0 through N.
+ 
+Note that you must trap cases where you have no command line 
+arguments and where you have too many command line arguments. 
+It is OK in both of these cases to print an error message and 
+exit the program.
+
+Your program must display the value of N (formatted as shown
+ below - tab seperated) followed by a blank line. You may 
+also want to "man 3 atoi()".
+
+As you populate the list, print out the values being inserted 
+(formatted as shown below - tab seperated), followed by a 
+blank line.
+
+Once the list is populated, print out the contents from left 
+to right, then print out a blank line, then print out the 
+contents from right to left.
+
+The inputs (data or payload) will simply come from a for loop 
+(0 to N), in that order! Here is what your output MUST look 
+like (except N will vary).
+
+Command line argument: 	3
+
+Input data:		0
+Input data:		1
+Input data:		2
+Input data:		3
+
+Left to right output:	0
+Left to right output:	1
+Left to right output:	2
+Left to right output:	3
+
+Right to left output:	3
+Right to left output:	2
+Right to left output:	1
+Right to left output:	0
+
+Finally, pictorally, the linked list should look like this:
+
+Head -> |---| -> |---| -> NULL
+        | 0 |    | 1 |
+NULL <- |___| <- |___| <- Tail
+
+REQUIREMENTS:
+-------------
+1. Your program must run in Streibel 115/109 or on shell.aero.und.edu.
+
+2. Your full name must appear as a comment at the beginning of your 
+   program.
+
+3. Your source code must be named hw8-yourname.c
+
+4. Email your source (subject hw8-yourname) to rmarsh@cs.und.edu 
