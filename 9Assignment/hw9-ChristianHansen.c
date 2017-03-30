@@ -64,7 +64,7 @@ void LOAD(FILE *stream, int size, node *(*root))
 
 	rewind(stream);
 
-	for(i = 0; i < size; i++)
+	for(i = 0; i < size + 1; i++)
 	{
 		getline(&tempText, &lineLen, stream);
 		item->first = strdup(strtok(tempText, " "));
