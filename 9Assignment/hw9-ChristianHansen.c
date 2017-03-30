@@ -37,89 +37,46 @@ int SCAN(FILE *(*stream))
 
 void INSERT(node *(*tree), node *item)
 {
-        node *curr = *tree;
-	int inserted = 0;
-
-	while(inserted == 0)
+	if(!*tree)
 	{
-	        if(strcmp(item->first, (*tree)->first) > 0 && curr->left != NULL )
-	        {
-	                curr = curr->left;
-			if(curr->left == NULL)
-			{
-  			        curr->left = item;
-				inserted = 1;
-			}
-	        }
-	        else if(strcmp(item->first, (*tree)->first) < 0 && curr->right != NULL)
-	        {
-	                curr = curr->right;
-			if(curr->right == NULL)
-			{
-  			        curr->right = item;
-				inserted = 1;
-			}
-                }
+		*tree = item;
+		return;
+	}
+	else
+	{
+		if(strcmp((*tree)->first, item->first) < 0)
+		{ printf("\n\ncomp: %s to %s %i\n\n", (*tree)->first, item->first, strcmp((*tree)->first, item->first));
+			INSERT(&(*tree)->left, item);
+		}
 		else
-		{
-		        if(curr->right != NULL)
-			{
-   			        curr = curr->right;
-				if(curr->right == NULL)
-				{
-				        curr->right = item;
-				        inserted = 1;
-				}
-			}
-			else
-			{
-			        curr->right = item;
-				inserted = 1;
-			}
+		{printf("\n\ncomp: %s to %s %i\n\n", (*tree)->first, item->first, strcmp((*tree)->first, item->first));
+			INSERT(&(*tree)->right, item);
 		}
 	}
-	
 }
 
 void LOAD(FILE *stream, int size, node *(*root))
 {
 	int i;
-	int result;
-	char *tempFName = NULL;
-	char *tempLName = NULL;
-	char *tempPhone = NULL;
 	char *tempText = NULL;
 	size_t lineLen;
-	node *item = malloc(sizeof(node));
+	node *item = (node *)malloc(sizeof(node));
 
 	rewind(stream);
 
 	for(i = 0; i < size; i++)
 	{
 		getline(&tempText, &lineLen, stream);
-		tempFName = strtok(tempText, " ");
-		tempLName = strtok(NULL, " ");
-		tempPhone = strtok(NULL, "\n");
+		item->first = strdup(strtok(tempText, " "));
+		item->last = strdup(strtok(NULL, " "));
+		item->number = (long)strtok(NULL, "\n");
 
-		printf("\nname: %s\n", tempFName);
+		printf("\n\n%s\n\n", item->first);
+		if(i == 0){
+			*root = item;}
+		//INSERT(root, item);
 
-		item->first = (char*)calloc(strlen(tempFName) + 1, sizeof(char));
-		item->last = (char*)calloc(strlen(tempLName) + 1, sizeof(char));
-		
-		strcpy(item->first, tempFName);
-		strcpy(item->last, tempLName);
-		item->number = (long)tempPhone;
-
-		printf("\ni: %i\n", i);
-		
-		if(i == 0)
-		{
-		        *root = item;
-		}
-		else
-		{
-		        INSERT(&*root, item);
-		}
+		printf("\n\nroot %s\n\n", (*root)->first);
 	}
 }
 
