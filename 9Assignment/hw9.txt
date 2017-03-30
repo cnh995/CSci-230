@@ -1,0 +1,111 @@
+HW-9	CS230	10 points	Due: March 31
+
+For this assignment we will celebrate the birthday of
+Al Gore (wo invented the Internet) by combining HW5, 
+the midterm, and trees. Yippie!
+
+The program will require the following structure:
+
+struct myTree { 
+   char *first;
+   char *last;
+   long number;
+   struct myTree *right, *left; 
+}; 
+
+typedef struct myTree node; 
+
+
+The program will NOT require any command line argument.
+
+You MUST use getline and strtok.
+
+You MUST use the following functions:
+
+1) int SCAN(FILE *(*stream)) - this function will open the 
+file/stream and return an integer indicating how many lines 
+there are. Note that you need to pass stream, which is a 
+pointer, by reference. So you are passing this as a pointer 
+to a pointer.
+
+2) void LOAD(FILE *stream, int size, node *(*root)) - this 
+function will rewind file, read in the data, populating the 
+tree. Note that stream is passed by value this time. The 
+function then returns the populated array of struct.
+
+3) void INSERT(node *(*tree), node *item) - this function will
+get called by LOAD to actually populate the tree. I suggest
+you use something like:
+
+  result = strcmp(item->first, (*tree)->first);	
+
+To compare/sort the first names. I.E. we will build the tree
+based on the first name.
+
+4) void PRE_ORDER(node *tree) - this function will display the
+tree contents using a pre-order traversal.
+
+5) void IN_ORDER(node *tree) - this function will display the
+tree contents using an in-order traversal.
+
+6) void POST_ORDER(node *tree) - this function will display the
+tree contents using a post-order traversal.
+
+7) void FREE(node *tree) - this function will free the tree. You
+can simply modify one of the traversal methods, but you must
+pick the correct one or you will have a memory leak.
+
+Your main will look like:
+
+int main(void) {
+int size;
+FILE *stream;
+node *tree = NULL;
+    size = SCAN(&stream);
+    LOAD(stream, size, &tree);
+    system("clear"); // Clear the screen.
+    printf("\nPRE_ORDER\n");
+    printf("--------------\n");
+    PRE_ORDER(tree); 
+    printf("\nIN_ORDER\n");
+    printf("--------------\n");
+    IN_ORDER(tree); 
+    printf("\nPOST_ORDER\n");
+    printf("--------------\n");
+    POST_ORDER(tree); 
+    FREE(tree);		// See note below
+    tree = NULL;
+}
+
+Note: If you want to set tree to NULL inside of the FREE(tree) 
+function, you will need to change the FREE function to:
+
+   void FREE(node *(*tree))
+
+   or 
+
+   node *FREE(node *tree)
+
+The data file (midterm.data) has the following file format:
+
+ronald johnson 7774013
+john ronson 7774014
+tomas smith 7774015	
+won ton 7774016
+
+COMMENTS:
+---------
+If you think about how a tree would/should get populated, you can 
+create your own data file that should result in a perfectly balanced
+tree.
+
+REQUIREMENTS:
+-------------
+1. Your program must run in Streibel 115/109 or on shell.aero.und.edu.
+
+2. Your full name must appear as a comment at the beginning of your 
+   program.
+
+3. Your source code must be named hw9-yourname.c
+
+4. Email your source (subject hw9-yourname) to rmarsh@cs.und.edu 
