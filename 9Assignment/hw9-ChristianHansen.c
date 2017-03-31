@@ -16,20 +16,19 @@ typedef struct myTree node;
 
 int SCAN(FILE *(*stream))
 {
-	int size = 0;
+	int size = 1;
 	*stream = fopen("hw9.data", "r");
 	char *buffer = NULL;
 	size_t bufsize = 0;
 	size_t temp = getline(&buffer, &bufsize,*stream);
 
 	//Increment size for each line break until the end of the file
-	while(!feof(*stream))
+	while(getline(&buffer, &bufsize, *stream) != -1)
 	{
 		size++;
-		
-		temp = getline(&buffer, &bufsize, *stream);
 	}
 
+	free(buffer);
 	return size;
 }
 
@@ -40,50 +39,61 @@ void INSERT(node *(*tree), node *item)
 		*tree = item;
 		return;
 	}
+	
+	if(strcmp((*tree)->first, item->first) < 0)
+	{
+		INSERT(&(*tree)->left, item);
+	}
 	else
 	{
-		if(strcmp((*tree)->first, item->first) < 0)
-		{ printf("\n\ncomp: %s to %s %i\n\n", (*tree)->first, item->first, strcmp((*tree)->first, item->first));
-			INSERT(&(*tree)->left, item);
-		}
-		else
-		{printf("\n\ncomp: %s to %s %i\n\n", (*tree)->first, item->first, strcmp((*tree)->first, item->first));
-			INSERT(&(*tree)->right, item);
-		}
+		INSERT(&(*tree)->right, item);
 	}
+}
+
+char *strdup(const char *str)
+{
+	char *s = malloc(strlen(str) + 1);
+	if(s)
+	{
+		strcpy(s, str);
+	}
+
+	return s;
+}
+
+node *newNode(char *text)
+{
+	node *item = malloc(sizeof(item));
+
+	if(item)
+	{
+		item->first = strdup(strtok(text, " "));
+		item->last = strdup(strtok(NULL, " "));
+		item->number = atol(strtok(NULL, "\n"));
+		item->left = NULL;
+		item->right = NULL;
+	}
+
+	return item;
 }
 
 void LOAD(FILE *stream, int size, node *(*root))
 {
 	int i;
-	char *tempText;
-	size_t lineLen;
-	node *item = (node *)malloc(sizeof(node));
+	char *tempText = NULL;
+	size_t lineLen = 0;
 
 	rewind(stream);
 
-	getline(&tempText, &lineLen, stream);
-	item->first = strtok(tempText, " ");
-	item->last = strtok(NULL, " ");
-	item->number = (long)strtok(NULL, "\n");
-	*root = item;
-
-	for(i = 0; i < size + 1; i++)
+	while(getline(&tempText, &lineLen, stream) != -1)
 	{
-		printf("\n\n%s\n\n", item->first);
-		if(i == 0){
-			*root = item;}
-		//INSERT(root, item);
-
-		printf("\n\nroot %s\n\n", (*root)->first);
-
-		getline(&tempText, &lineLen, stream);
-		item->first = strtok(tempText, " ");
-		item->last = strtok(NULL, " ");
-		item->number = (long)strtok(NULL, "\n");
+		node *item = newNode(tempText);
+		INSERT(root, item);
 	}
 	
+	
 	fclose(stream);
+	free(tempText);
 }
 
 void PRE_ORDER(node *tree)
