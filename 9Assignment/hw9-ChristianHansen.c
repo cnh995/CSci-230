@@ -16,13 +16,11 @@ typedef struct myTree node;
 
 int SCAN(FILE *(*stream))
 {
-	int size = 1;
+	int size = 0;
 	*stream = fopen("hw9.data", "r");
 	char *buffer = NULL;
 	size_t bufsize = 0;
-	size_t temp = getline(&buffer, &bufsize,*stream);
 
-	//Increment size for each line break until the end of the file
 	while(getline(&buffer, &bufsize, *stream) != -1)
 	{
 		size++;
@@ -63,7 +61,7 @@ char *strdup(const char *str)
 
 node *newNode(char *text)
 {
-	node *item = malloc(sizeof(item));
+	node *item = malloc(sizeof(*item));
 
 	if(item)
 	{
@@ -79,7 +77,6 @@ node *newNode(char *text)
 
 void LOAD(FILE *stream, int size, node *(*root))
 {
-	int i;
 	char *tempText = NULL;
 	size_t lineLen = 0;
 
@@ -90,7 +87,6 @@ void LOAD(FILE *stream, int size, node *(*root))
 		node *item = newNode(tempText);
 		INSERT(root, item);
 	}
-	
 	
 	fclose(stream);
 	free(tempText);
@@ -146,10 +142,13 @@ void FREE(node *tree)
 	FREE(tree->left);
 	FREE(tree->right);
 
+	free(tree->first);
+	free(tree->last);
 	free(tree);
 }
 
-int main(void) {
+int main(void)
+{
         int size;
         FILE *stream;
         node *tree = NULL;
