@@ -1,0 +1,74 @@
+HW-10	CS230	20 points	Due: April 14
+
+On this day in 1933 Prohibition ended in the United States. 
+Sounds like a reason to celebrate by learning how to “take 
+out the garbage.”
+
+The assignment is to modify hw8 such that link removal
+is managed by your own garbage collection system.
+
+Part 1:
+-------
+You MUST modify your hw8 such that the code for displaying
+the list contents is now contained in two functions called:
+
+    DISPLAY_INORDER(xxxx)
+    DISPLAY_POSTORDER(xxxx)
+
+Where xxxx will be whatever parameters need to be passed.
+
+You MUST also have a routine that deletes (frees) the nodes
+of the link list. This routine will get called at the end
+of the program. The function will be called:
+
+    FREE_INORDER(xxxx)
+
+Part 2:
+-------
+You must now randomly determine a number of nodes to delete
+and randomly determine what specific nodes to delete. You 
+might want to use something like:
+
+   number2Delete = rand() % number2Add + 3;
+   for (i = 0; i < number2Delete; i++) {
+       // Pick a random node (payload) to delete.
+       link2Delete = (rand() % number2Add);
+
+Part 3:
+-------
+For each node selected for removal, you must not yet actually
+delete it from memory. Rather you will adjust your link list to
+skip over it and use a second linked list (our trash list) to
+record the node slated for deletion. You must also account for
+the case where an already deleted node gets selected for removal 
+again. Finally, note that "link2Delete" refers to the payload 
+section. So, you will have to search the linked list to find 
+the node to delete.
+ 
+Part 4:
+------- 
+Once you have processed/recorded all of the nodes slated for
+removal, you MUST display the contents of your trash list via 
+a function called:
+
+   DISPLAY_TRASH(xxxx)
+
+You must then you MUST free up the trash list and display the
+remaining contents of the original list via calls to
+  
+    DISPLAY_INORDER(xxxx)
+    DISPLAY_POSTORDER(xxxx)
+
+Finally, you must call the FREE_INORDER(xxxx) function.
+
+REQUIREMENTS:
+-------------
+1. Your program must run in Streibel 115/109 or on shell.aero.und.edu.
+
+2. Your full name must appear as a comment at the beginning of your 
+   program.
+
+3. Your source code must be named hw10-yourname.c
+
+4. Email your source (subject hw10-yourname) to rmarsh@cs.und.edu 
+
