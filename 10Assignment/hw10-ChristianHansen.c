@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 //Christian Hansen
 
@@ -29,11 +30,25 @@ void insertNode(struct node *item, struct node **head, struct node **tail)
 {
 	if(!*head)
 	{
-		*head = item;
+		(*head) = item;
+		(*head)->prev = NULL;
+		(*tail) = item;
+		(*tail)->next = NULL;
 		return;
 	}
 	
-	insertNode(item, &(*head)->next, tail);
+	struct node *curr = *head;
+	struct node *temp = malloc(sizeof(*temp));
+
+	while(curr->next != NULL)
+	{
+		curr = curr->next;
+	}
+
+	temp = item;
+	curr->next = temp;
+	temp->prev = curr;
+	(*tail) = temp;
 }
 
 void DISPLAY_INORDER(struct node *head, struct node *tail)
@@ -43,16 +58,12 @@ void DISPLAY_INORDER(struct node *head, struct node *tail)
 		return;
 	}
 
-    if(head != tail)
-    {
-	    DISPLAY_INORDER(head->prev, tail);
-    }
+	struct node *curr = head;
 
-	printf("%i\n", head->data);
-
-    if(head != tail)
+    while(curr != NULL)
     {
-	    DISPLAY_INORDER(head->next, tail);
+		printf("%i\n", curr->data);
+		curr = curr->next;
     }
 }
 
@@ -63,13 +74,13 @@ void DISPLAY_POSTORDER(struct node *head, struct node *tail)
 		return;
 	}
 
-    if(head != tail)
-    {
-	    DISPLAY_POSTORDER(head->prev, tail);
-	    DISPLAY_POSTORDER(head->next, tail);
-    }
+	struct node *curr = tail;
 
-	printf("%i\n", head->data);
+    while(curr != NULL)
+    {
+		printf("%i\n", curr->data);
+		curr = curr->prev;
+    }
 }
 
 void FREE_INORDER(struct node *head, struct node *tail)
@@ -79,28 +90,100 @@ void FREE_INORDER(struct node *head, struct node *tail)
 		return;
 	}
 
-    if(head != tail)
+	printf("\n");
+
+	struct node *curr = head;
+
+    while(curr != NULL)
     {
-	    FREE_INORDER(head->prev, tail);
+		if(curr != tail)
+		{
+			curr = curr->next;
+		}
+
+		if(curr != NULL && curr != tail)
+		{
+			free(curr->prev);
+		}
+
+		if(curr == tail)
+		{
+			free(curr->prev);
+			free(curr);
+			break;
+		}
     }
+}
 
-	free(&head->data);
+void DELETE_NODE(int numToDelete, struct node **head, struct node **tail, struct node **trashHead, struct node **trashTail)
+{
+	int i;
+	int j;
+	struct node *curr = malloc(sizeof(curr));
+	struct node *temp = malloc(sizeof(temp));
 
-    if(head != tail)
-    {
-    	FREE_INORDER(head->next, tail);
-    }
+	for(i = numToDelete; i > 0; i--)
+	{
+		int nodeToDelete = rand() % i;
+printf("\nDeleting node at index: %i", nodeToDelete);
+		j = 0;
+		curr = *head;
 
-	free(head);
+		while(curr != NULL)
+		{
+			if(j == nodeToDelete)
+			{
+				if(curr == (*head))
+				{
+					if(curr->next != NULL)
+					{
+						(*head) = curr->next;
+						(*head)->prev = NULL;
+						curr->next = NULL;
+						insertNode(curr, &*trashHead, &*trashTail);
+						break;
+					}
+					else
+					{
+						(*head) = NULL;
+						curr->next = NULL;
+						insertNode(curr, &*trashHead, &*trashTail);
+						break;
+					}
+				}
+				else if(curr == (*tail))
+				{
+					(*tail) = curr->prev;
+					(*tail)->next = NULL;
+					curr->prev = NULL;
+					insertNode(curr, &*trashHead, &*trashTail);
+					break;
+				}
+				else
+				{
+					temp = curr->prev;
+					temp->next = curr->next;
+					temp = curr->next;
+					temp->prev = curr->prev;
+					curr->prev = NULL;
+					curr->next = NULL;
+					insertNode(curr, &*trashHead, &*trashTail);
+					break;
+				}
+			}			
+			j++;
+			curr = curr->next;
+		}
+	}
 }
 
 void DISPLAY_TRASH(struct node *head, struct node *tail)
 {
-    printf("\nTrash Display:\n");
+    printf("\n\nTrash Inorder:\n");
     DISPLAY_INORDER(head, tail);
+	printf("\nTrash Postorder:\n");
     DISPLAY_POSTORDER(head, tail);
 
-    printf("\nFreeing Trash...\n");
     FREE_INORDER(head, tail);
 }
 
@@ -120,9 +203,9 @@ int main(int argv, char **argc)
 
 	int n = atoi(argc[1]);
 	int i;
-	struct node *head = malloc(sizeof(*head));
+	struct node *head = NULL;
 	struct node *tail = NULL;
-    struct node *trashHead = malloc(sizeof(*head));
+    struct node *trashHead = NULL;
     struct node *trashTail = NULL;
 
 	for(i = 0; i <= n; i++)
@@ -137,12 +220,22 @@ int main(int argv, char **argc)
 		printf("Input data: %i\t\t\n", i);		
 	}
 
+	srand(time(NULL));
+	int numToDelete = rand() % (atoi(argc[1]) + 2);
+	printf("\nDeleting %i node(s)...\n", numToDelete);
 
-    printf("\nInorder:\n");
+	DELETE_NODE(numToDelete, &head, &tail, &trashHead, &trashTail);
+
+	if(trashHead != NULL)
+	{
+    	DISPLAY_TRASH(trashHead, trashTail);
+	}
+
+    printf("\n\nInorder:\n");
 	DISPLAY_INORDER(head, tail);
     printf("\nPostorder:\n");
     DISPLAY_POSTORDER(head, tail);
-    //DISPLAY_TRASH(trashHead, trashTail);
+	printf("\n");
 
     FREE_INORDER(head, tail);
 	return 0;
