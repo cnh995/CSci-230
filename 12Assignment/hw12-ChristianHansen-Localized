@@ -30,7 +30,7 @@ void insertNode(struct node *item, struct node **head, struct node **tail)
 {
   struct node *curr = *head;
   struct node *localItem = item;
-  struct node *localTail = tail;
+  struct node *localTail = *tail;
   
 	if(!curr)
 	{
