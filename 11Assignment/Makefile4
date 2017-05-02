@@ -1,0 +1,25 @@
+all: hw11-ChristianHansen-4.o hw11-ChristianHansen-A.o hw11-ChristianHansen-B.o hw11-ChristianHansen-C.o hw11-ChristianHansen-D.o hw11-lib-ChristianHansen.so
+	gcc -lm -fPIC -ldl -shared hw11-ChristianHansen-4.o hw11-ChristianHansen-A.o hw11-ChristianHansen-B.o hw11-ChristianHansen-C.o hw11-ChristianHansen-D.o -o hw11-ChristianHansen-4
+
+hw11-ChristianHansen-4.o: hw11-ChristianHansen-4.c
+	gcc -c hw11-ChristianHansen-4.c
+
+hw11-ChristianHansen-A.o: hw11-ChristianHansen-A.c
+	gcc -c hw11-ChristianHansen-A.c
+
+hw11-ChristianHansen-B.o: hw11-ChristianHansen-B.c
+	gcc -c hw11-ChristianHansen-B.c
+
+hw11-ChristianHansen-C.o: hw11-ChristianHansen-C.c
+	gcc -c hw11-ChristianHansen-C.c
+
+hw11-ChristianHansen-D.o: hw11-ChristianHansen-D.c
+	gcc -c hw11-ChristianHansen-D.c
+
+hw11-ChristianHansen-lib.so: hw11-ChristianHansen-4.c
+	gcc -shared hw11-ChristianHansen-4.c -o hw11-lib-ChristianHansen.so -fPIC
+
+libs: hw11-ChristianHansen-lib.so
+
+clean: 
+	rm *.o
